@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Logs</title>
+</head>
+<body>
+
+<h2>Material Access Logs</h2>
+
+<table border="1">
+<tr>
+    <th>Email</th>
+    <th>Material</th>
+    <th>Access Time</th>
+</tr>
+
+{% for log in logs %}
+<tr>
+    <td>{{ log[0] }}</td>
+    <td>{{ log[1] }}</td>
+    <td>{{ log[2] }}</td>
+</tr>
+{% endfor %}
+
+</table>
+
+</body>
+</html>
