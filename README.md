@@ -80,7 +80,8 @@ This platform introduces a secure digital delivery system that embeds user ident
 
 ---
 
-## Developed By
+## Developer
 
-Sheetal sagari. B S
-BE CSE, NIE Mysuru
+**Sheetal Sagari B S**  
+BE Computer Science Engineering  
+The National Institute of Engineering, Mysuru
