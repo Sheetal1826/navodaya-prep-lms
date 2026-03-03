@@ -1,3 +1,5 @@
+from werkzeug.utils import secure_filename
+import os
 from datetime import datetime
 import sqlite3
 from flask import Flask, render_template, request, session, redirect, url_for
@@ -19,13 +21,21 @@ def init_db():
     ''')
 
     cursor.execute('''
-    CREATE TABLE IF NOT EXISTS access_log (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        email TEXT,
-        material TEXT,
-        access_time TEXT
-    )
-''')
+        CREATE TABLE IF NOT EXISTS access_log (
+           id INTEGER PRIMARY KEY AUTOINCREMENT,
+           email TEXT,
+           material TEXT,
+           access_time TEXT
+        )
+    ''')
+
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS materials (
+           id INTEGER PRIMARY KEY AUTOINCREMENT,
+           title TEXT,
+           filename TEXT
+        )
+    ''')
 
     conn.commit()
     conn.close()
@@ -33,7 +43,7 @@ def init_db():
 
 @app.route('/')
 def home():
-    return render_template('index.html')
+    return render_template('index.html', email=session.get('email'))
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -94,12 +104,25 @@ def materials():
 
         conn = sqlite3.connect('database.db')
         cursor = conn.cursor()
+
         cursor.execute("INSERT INTO access_log (email, material, access_time) VALUES (?, ?, ?)",
                        (email, material, access_time))
+
+        cursor.execute("SELECT title, filename FROM materials")
+        materials = cursor.fetchall()
+
         conn.commit()
         conn.close()
 
-        return render_template('materials.html', email=email)
+        return render_template('materials.html', email=email, materials=materials)
+    else:
+        return redirect(url_for('login'))
+
+
+@app.route('/view/<filename>')
+def view_material(filename):
+    if 'email' in session:
+        return render_template('view.html', email=session['email'], filename=filename)
     else:
         return redirect(url_for('login'))
 
@@ -118,6 +141,37 @@ def admin_logs():
         conn.close()
 
         return render_template('admin_logs.html', logs=logs)
+
+    else:
+        return "Access Denied!"
+
+
+@app.route('/upload', methods=['GET', 'POST'])
+def upload():
+
+    if 'email' in session and session['email'] == "admin@jnv.com":
+
+        if request.method == 'POST':
+
+            title = request.form['title']
+            file = request.files['file']
+
+            if file:
+                filename = secure_filename(file.filename)
+                file.save(os.path.join('static/pdfs', filename))
+
+                conn = sqlite3.connect('database.db')
+                cursor = conn.cursor()
+
+                cursor.execute("INSERT INTO materials (title, filename) VALUES (?, ?)",
+                               (title, filename))
+
+                conn.commit()
+                conn.close()
+
+                return "Material Uploaded Successfully!"
+
+        return render_template('upload.html')
 
     else:
         return "Access Denied!"

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>View Material</title>
+</head>
+<body>
+
+<h2>Viewing Material</h2>
+
+<div id="pdf-viewer"></div>
+
+<br>
+<a href="/materials">Back to Materials</a>
+
+<script type="module">
+
+import * as pdfjsLib from "{{ url_for('static', filename='pdfjs/pdf.mjs') }}";
+
+pdfjsLib.GlobalWorkerOptions.workerSrc = "{{ url_for('static', filename='pdfjs/pdf.worker.mjs') }}";
+
+const url = "{{ url_for('static', filename='pdfs/' + filename) }}";
+const viewer = document.getElementById('pdf-viewer');
+
+pdfjsLib.getDocument(url).promise.then(function(pdf) {
+
+    for (let i = 1; i <= pdf.numPages; i++) {
+
+        pdf.getPage(i).then(function(page) {
+
+            const scale = 1.5;
+            const viewport = page.getViewport({scale: scale});
+
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
+
+            viewer.appendChild(canvas);
+
+            page.render({
+                canvasContext: context,
+                viewport: viewport
+            });
+
+            const watermark = document.createElement('div');
+            watermark.innerText = "{{ email }}";
+            watermark.style.position = "absolute";
+            watermark.style.top = "50%";
+            watermark.style.left = "50%";
+            watermark.style.transform = "translate(-50%, -50%) rotate(-30deg)";
+            watermark.style.fontSize = "30px";
+            watermark.style.color = "rgba(0,0,0,0.2)";
+            watermark.style.pointerEvents = "none";
+
+            canvas.parentElement.style.position = "relative";
+            canvas.parentElement.appendChild(watermark);
+
+        });
+
+    }
+
+});
+
+document.addEventListener('contextmenu', event => event.preventDefault());
+
+document.addEventListener('keydown', function(e) {
+
+    if (e.ctrlKey && (e.key === 'p' || e.key === 's' || e.key === 'u')) {
+        e.preventDefault();
+    }
+
+    if (e.ctrlKey && e.shiftKey && e.key === 'I') {
+        e.preventDefault();
+    }
+
+});
+
+</script>
+
+</body>
+</html>
