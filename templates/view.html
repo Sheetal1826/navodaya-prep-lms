@@ -44,18 +44,35 @@ pdfjsLib.getDocument(url).promise.then(function(pdf) {
             });
 
             const watermark = document.createElement('div');
-            watermark.innerText = "{{ email }}";
-            watermark.style.position = "absolute";
-            watermark.style.top = "50%";
-            watermark.style.left = "50%";
-            watermark.style.transform = "translate(-50%, -50%) rotate(-30deg)";
-            watermark.style.fontSize = "30px";
-            watermark.style.color = "rgba(0,0,0,0.2)";
-            watermark.style.pointerEvents = "none";
 
-            canvas.parentElement.style.position = "relative";
-            canvas.parentElement.appendChild(watermark);
+watermark.innerText = "{{ email }}";
 
+watermark.style.position = "absolute";
+watermark.style.top = "0";
+watermark.style.left = "0";
+watermark.style.width = "100%";
+watermark.style.height = "100%";
+
+watermark.style.display = "flex";
+watermark.style.flexWrap = "wrap";
+watermark.style.justifyContent = "center";
+watermark.style.alignItems = "center";
+
+watermark.style.pointerEvents = "none";
+
+watermark.style.fontSize = "22px";
+watermark.style.color = "rgba(0,0,0,0.15)";
+watermark.style.transform = "rotate(-25deg)";
+
+for(let i=0;i<40;i++){
+    const span=document.createElement("span");
+    span.innerText="{{ email }}";
+    span.style.margin="40px";
+    watermark.appendChild(span);
+}
+
+canvas.parentElement.style.position = "relative";
+canvas.parentElement.appendChild(watermark);
         });
 
     }
