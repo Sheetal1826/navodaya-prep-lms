@@ -1,16 +1,41 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <title>View Material</title>
+
+<title>View Material</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
 </head>
+
 <body>
+
+<div class="navbar">
+
+<h1>JNV Prep Portal</h1>
+
+<div>
+<a href="/">Home</a>
+<a href="/materials">Materials</a>
+<a href="/logout">Logout</a>
+</div>
+
+</div>
+
+
+<div class="viewer-container">
 
 <h2>Viewing Material</h2>
 
 <div id="pdf-viewer"></div>
 
 <br>
+
 <a href="/materials">Back to Materials</a>
+
+</div>
+
 
 <script type="module">
 
@@ -45,34 +70,35 @@ pdfjsLib.getDocument(url).promise.then(function(pdf) {
 
             const watermark = document.createElement('div');
 
-watermark.innerText = "{{ email }}";
+            watermark.innerText = "{{ email }}";
 
-watermark.style.position = "absolute";
-watermark.style.top = "0";
-watermark.style.left = "0";
-watermark.style.width = "100%";
-watermark.style.height = "100%";
+            watermark.style.position = "absolute";
+            watermark.style.top = "0";
+            watermark.style.left = "0";
+            watermark.style.width = "100%";
+            watermark.style.height = "100%";
 
-watermark.style.display = "flex";
-watermark.style.flexWrap = "wrap";
-watermark.style.justifyContent = "center";
-watermark.style.alignItems = "center";
+            watermark.style.display = "flex";
+            watermark.style.flexWrap = "wrap";
+            watermark.style.justifyContent = "center";
+            watermark.style.alignItems = "center";
 
-watermark.style.pointerEvents = "none";
+            watermark.style.pointerEvents = "none";
 
-watermark.style.fontSize = "22px";
-watermark.style.color = "rgba(0,0,0,0.15)";
-watermark.style.transform = "rotate(-25deg)";
+            watermark.style.fontSize = "22px";
+            watermark.style.color = "rgba(0,0,0,0.15)";
+            watermark.style.transform = "rotate(-25deg)";
 
-for(let i=0;i<40;i++){
-    const span=document.createElement("span");
-    span.innerText="{{ email }}";
-    span.style.margin="40px";
-    watermark.appendChild(span);
-}
+            for(let i=0;i<40;i++){
+                const span=document.createElement("span");
+                span.innerText="{{ email }}";
+                span.style.margin="40px";
+                watermark.appendChild(span);
+            }
 
-canvas.parentElement.style.position = "relative";
-canvas.parentElement.appendChild(watermark);
+            canvas.parentElement.style.position = "relative";
+            canvas.parentElement.appendChild(watermark);
+
         });
 
     }

@@ -88,3 +88,54 @@ p {
 .view-btn:hover {
     background-color: var(--button-hover);
 }
+.login-card {
+    width: 350px;
+    margin: 80px auto;
+    padding: 30px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+}
+
+.login-card input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.login-card button {
+    width: 100%;
+    padding: 10px;
+    background-color: var(--button-color);
+    border: none;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.home {
+    max-width: 900px;
+    margin: 80px auto;
+    text-align: center;
+}
+
+.home h1 {
+    font-size: 40px;
+    margin-bottom: 20px;
+}
+
+.home p {
+    font-size: 20px;
+    margin-bottom: 30px;
+}
+.viewer-container {
+    max-width: 1000px;
+    margin: 40px auto;
+    text-align: center;
+}
+
+#pdf-viewer canvas {
+    margin: 20px auto;
+    display: block;
+}
